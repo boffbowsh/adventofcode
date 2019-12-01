@@ -7,14 +7,23 @@ fn main() {
     let f = File::open(path).expect("Couldn't open file");
     let f = BufReader::new(f);
 
-    let mut sum: u32 = 0;
+    let mut fuel = 0;
     for line in f.lines() {
         let n: u32 = line.unwrap().trim().parse()
             .expect("Failed to parse");
-        let n: u32 = n / 3;
-        let n: u32 = n - 2;
-        sum = sum + n
+        fuel = fuel + fuel_for_mass(n);
     }
 
-    println!("{}", sum);
+    println!("With fuel mass: {}", fuel);
+}
+
+fn fuel_for_mass(mass: u32) -> u32 {
+    let n = mass / 3;
+
+    if n < 2 {
+        0
+    } else {
+        let fuel = n - 2;
+        fuel + fuel_for_mass(fuel)
+    }
 }
